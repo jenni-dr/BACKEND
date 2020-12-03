@@ -27,8 +27,6 @@ export class UserDatabase extends BaseDatabase {
           .select("*")
           .from(UserDatabase.TABLE_NAME)
           .where({ email });
-    
-        return User.toUserModel(result[0]);
-      }
-    
+          return User.toUserModel(result[0]);
     }
+}

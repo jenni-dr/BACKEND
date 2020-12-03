@@ -16,7 +16,8 @@ export class MusicController {
                 date: req.body.date,
                 file:req.body.file,
                 genre:req.body.genre,
-                album:req.body.album
+                album:req.body.album,
+                user_id:req.body.user_id
             }
             const musicBusiness = new MusicBusiness(
                 new MusicDatabase,
@@ -29,28 +30,26 @@ export class MusicController {
                 message
             })
 
-        } catch (err) {
+        }catch(err) {
             res.status(err.customErrorCode || 400)
             .send({
                 message: err.message
             })
-        } finally {
+        }finally {
             await BaseDatabase.destroyConnection()
         }
     }
 
      async  getAllMusic(req: Request,res: Response):Promise<any> {
         try{ 
-  
-        const musicBusiness = new MusicBusiness(
+            const musicBusiness = new MusicBusiness(
             new MusicDatabase,
             new IdGenerator,
             new Authenticator
         )
         const input = ( req.headers.authorization as string) 
-  
-
-       const music = await musicBusiness.getMusicAll(input)
+        
+        const music = await musicBusiness.getMusicAll(input)
     
        res.status(200).send(music)
         } catch (err) {
@@ -61,24 +60,35 @@ export class MusicController {
             await BaseDatabase.destroyConnection()
         }
     }
-}
-    //         try {
-    //             const musicDatabase = new MusicDatabase()
-                
-               
-    //             const music: Music[] = await musicDatabase.selectAllMusic()
-          
-    //             if(!music.length){
-    //                res.statusCode = 404
-    //                throw new Error("No music found")
-    //             }
-          
-    //             res.status(200).send(music)
-                
-    //          } catch (error) {
-    //             console.log(error)
-    //             res.send(error.message || error.sqlMessage)
-    //          }
-    //         }
-        
+
+    public async getMusicById(req:Request,res:Response) {
+        try{
+            const musicBusiness = new MusicBusiness(
+                new MusicDatabase,
+                new IdGenerator,
+                new Authenticator
+            )
             
+            const result = await musicBusiness.getMusicById(req.params.id)
+            if (!result) {
+                throw new Error("Music not found")
+            }
+            
+            res.status(200).send({
+                id: result.id,
+                title:result.title,
+                author:result.author,
+                date:result.date,
+                file:result.file,
+                genre:result.genre,
+                album:result.album,
+                user_id:result.user_id
+            })
+        } catch (error) {
+            res.status(400).send({
+                message: error.message || error.sqlMessage
+            })
+        }
+    }
+}
+    

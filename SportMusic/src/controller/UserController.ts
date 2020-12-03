@@ -32,22 +32,18 @@ import { IdGenerator } from "../services/IdGenerator";
                     message,
                     token 
                 });
-    
+            
             } catch (error) {
                 res.status(400).send({ error: error.message });
             }
-    
             await BaseDatabase.destroyConnection();
         }
     async login(req: Request, res: Response) {
-
         try {
-
             const loginData: LoginInputDTO = {
                 email: req.body.email,
                 password: req.body.password
             };
-
             const userBusiness = new UserBusiness(
                 new UserDatabase,
                 new IdGenerator,
@@ -55,14 +51,12 @@ import { IdGenerator } from "../services/IdGenerator";
                 new Authenticator
             );
             const token = await userBusiness.authUserByEmail(loginData);
-
+            
             res.status(200).send({ token });
 
-        } catch (error) {
+        }catch (error) {
             res.status(400).send({ error: error.message });
         }
-
         await BaseDatabase.destroyConnection();
     }
-
 }

@@ -9,3 +9,4 @@ const musicController = new MusicController();
 
 musicRouter.post("/create", musicController.createMusic);
 musicRouter.get("/all", musicController.getAllMusic);
+musicRouter.get("/:id", musicController.getMusicById);

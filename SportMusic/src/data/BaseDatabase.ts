@@ -11,7 +11,7 @@ export abstract class BaseDatabase {
    protected tableNames = {
        
        users: "SPORTMUSIC_USER",
-       musics:"SPORTMUSIC_MUSIC",
+       musics:"SPORTMUSIC_MUSICS",
    }
 
    protected getConnection(): Knex{
