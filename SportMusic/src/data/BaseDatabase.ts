@@ -12,6 +12,10 @@ export abstract class BaseDatabase {
        
        users: "SPORTMUSIC_USER",
        musics:"SPORTMUSIC_MUSICS",
+       playlists:"SPORTMUSIC_PLAYLIST",
+       albums:"SPORTMUSIC_Album",
+       genres:"SPORTMUSIC_Genre",
+       artists:"SPORTMUSIC_Artist",
    }
 
    protected getConnection(): Knex{

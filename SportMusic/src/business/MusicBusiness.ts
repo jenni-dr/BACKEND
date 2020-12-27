@@ -6,6 +6,7 @@ import { Authenticator } from "../services/Authenticator"
 import { IdGenerator } from "../services/IdGenerator"
 
 export class MusicBusiness {
+    
     constructor(
         private musicDatabase: MusicDatabase,
         private idGenerator: IdGenerator,
@@ -13,6 +14,7 @@ export class MusicBusiness {
     ) { }
 
     async createMusic(input:MusicInputDTO) {
+        let message ='sucess'
         try{ 
             if (
               !input.title || 
@@ -20,30 +22,36 @@ export class MusicBusiness {
               !input.date|| 
               !input.file|| 
               !input.genre|| 
-              !input.album||
-              !input.user_id 
+              !input.album
+             
             ) {
                 throw new InvalidInputError("Invalid input to signUp")
             }
+            const tokenData= this.authenticator.getTokenData(input.token)
+            if(!tokenData){
+                message="Unauthorized"
+            }
+            
             const id = this.idGenerator.generate()
-            await this.musicDatabase.createMusic(
-                Music.toMusic({
-                ...input,
-                id:id,
-                date:new Date 
-                  
-                
-            })
-            )
-            const accessToken = this.authenticator.generateToken({ 
-                id
-            })
-            return accessToken 
-        }catch (error){
-            throw new CustomError(error.statusCode, error.message)
+            const newMusic : Music = new Music(
+                id,
+                input.title,
+                input.author,
+                input.date = new Date(),
+                input.file,
+                input.genre,
+                input.album,
+                tokenData.id
+           )
+           await this.musicDatabase.createMusic(newMusic)
+           return message
+    
+             }catch(error){
+                let message = error.sqlMessage || error.message
+                return message
+            }
         }
-    }
-
+           
     async getMusicAll(input :string) :Promise<string> {
         if(!input){
             throw new InvalidInputError("Invalid input to selectAllMusic")
@@ -64,7 +72,19 @@ export class MusicBusiness {
             genre:user.getGenre(),
             file:user.getFile(),
             album:user.getAlbum(),
-            user_id:user.getUserId()
+            
         }
+    }
+
+    public async deleteMusicById(id: string ) { 
+        let message ='Delete with sucess'
+        const user = await this.musicDatabase.deleteMusic(id);
+        if (user) {
+          throw new CustomError(400,"Music not found");
+        }
+        return {
+        message
+        }
+        
     }
 }

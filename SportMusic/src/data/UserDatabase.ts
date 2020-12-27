@@ -6,7 +6,7 @@ export class UserDatabase extends BaseDatabase {
 
     private static TABLE_NAME :string = "SPORTMUSIC_USER";
   
-    public async signup(user: User){
+    public async signUp(user: User):Promise<void>{
       try {
         await this.getConnection()
           .insert({

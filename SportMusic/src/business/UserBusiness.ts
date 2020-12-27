@@ -32,10 +32,10 @@ export class UserBusiness {
         const id = this.idGenerator.generate()
 
         const hashPassword = await this.hashManager.hash(input.password)
-        await this.userDatabase.signup(
+        await this.userDatabase.signUp(
             User.toUserModel({
                 ...input,
-                id,
+                id:id,
                 password: hashPassword
             })
         )

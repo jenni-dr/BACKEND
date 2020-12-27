@@ -17,8 +17,8 @@ export class MusicDatabase extends BaseDatabase {
             date:music.getDate(),
             file: music.getFile(),
             genre:music.getGenre(),
-            album:music.getGenre(),
-            user_id:music.getUserId(),
+            album:music.getAlbum(),
+            user_id:music.getUserId()
             
           })
           .into(this.tableNames.musics)
@@ -44,4 +44,11 @@ export class MusicDatabase extends BaseDatabase {
       } 
       return Music.toMusic(music[0])! 
     }
+
+    public async deleteMusic(id:string):Promise<any> {
+       await this.getConnection()
+      .delete ()
+      .from(MusicDatabase.TABLE_NAME)
+      .where({ id })
+  }
 }

@@ -16,14 +16,27 @@ export class Authenticator {
     return token;
   }
 
-  public getData(token: string): AuthenticationData {
-    const payload = jwt.verify(token, process.env.JWT_KEY as string) as any;
-    const result = {
-      id: payload.id,
+  public getTokenData(
+    token: string
+ ): AuthenticationData {
+    const result = jwt.verify(
+       token,
+       process.env.JWT_KEY as string
+    ) as AuthenticationData
+ 
+    return {
+       id: result.id,
+       
+    }
+ }
+  // public getData(token: string): AuthenticationData {
+  //   const payload = jwt.verify(token, process.env.JWT_KEY as string) as any;
+  //   const result = {
+  //     id: payload.id,
    
-    };
-    return result;
-  }
+  //   };
+  //   return result;
+  // }
 }
 
 interface AuthenticationData {

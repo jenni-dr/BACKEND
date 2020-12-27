@@ -13,11 +13,12 @@ export class MusicController {
             const input: MusicInputDTO = {
                 title: req.body.title,
                 author: req.body.author,
-                date: req.body.date,
+                date: new Date(),
                 file:req.body.file,
                 genre:req.body.genre,
                 album:req.body.album,
-                user_id:req.body.user_id
+               token:req.headers.authorization !
+               
             }
             const musicBusiness = new MusicBusiness(
                 new MusicDatabase,
@@ -47,9 +48,9 @@ export class MusicController {
             new IdGenerator,
             new Authenticator
         )
-        const input = ( req.headers.authorization as string) 
         
-        const music = await musicBusiness.getMusicAll(input)
+        
+        const music = await musicBusiness.getMusicAll(req.headers.authorization as string)
     
        res.status(200).send(music)
         } catch (err) {
@@ -82,12 +83,35 @@ export class MusicController {
                 file:result.file,
                 genre:result.genre,
                 album:result.album,
-                user_id:result.user_id
+                
             })
         } catch (error) {
             res.status(400).send({
                 message: error.message || error.sqlMessage
             })
+        }
+    }
+
+    public async deleteMusicId(req: Request, res: Response) :Promise<void> {
+        let message ='Delete with sucess'
+        try {
+            const musicBusiness = new MusicBusiness(
+                new MusicDatabase,
+                new IdGenerator,
+                new Authenticator
+            )
+            const result = await musicBusiness.deleteMusicById(req.params.id);
+            if(!result){
+              res.statusCode = 404
+              throw new Error("Music not found")
+          }
+          res.status(200).send({
+            message
+          });
+        } catch (err) {
+            res.status(400).send({
+              message: err.message,
+            });
         }
     }
 }

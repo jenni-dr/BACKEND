@@ -7,7 +7,7 @@ export class Music{
     private file: string,
     private genre:GENRE[],
     private album:string,
-    private user_id: string,
+   private user_id: string,
     ) {}
 
     public getId(): string {
@@ -30,9 +30,11 @@ export class Music{
     }
     public getAlbum(): string {
         return this.album
+    } 
+    public getUserId = () :string => {
+        return this.user_id
     }
-    public getUserId = () :string=> this.user_id
-
+   
     public setId(id: string){
         this.id = id;
     }
@@ -59,7 +61,7 @@ export class Music{
     }
 
     static toMusic(music: any): Music {
-        return new Music(music.id, music.title, music.author,new Date(music.date), music.file,music.genre,music.album , music.user_id);
+        return new Music(music.id, music.title, music.author,new Date(music.date), music.file,music.genre,music.album, music.user_id );
       }
 
     }
@@ -89,5 +91,11 @@ export interface MusicInputDTO{
     file: string,
     genre: GENRE[],
     album: string,
-    user_id:string
+    token:string
+    
     }
+
+    export type CreateMusicOutput = {
+        token: string
+     }
+     
