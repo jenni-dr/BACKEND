@@ -18,7 +18,7 @@ const userDatabase = {
         } else {
             throw new NotFoundError(`Unable to found user with email: ${email}`)
         }
-    })
+    }) 
 }
 const authenticator = {
     generateToken: jest.fn((payload: {id: string}) => "token_ablubluble"),
