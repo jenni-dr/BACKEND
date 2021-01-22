@@ -1,0 +1,6 @@
+node_modules
+packege-lock.json
+build
+.env
+README
+mySqlSetup
